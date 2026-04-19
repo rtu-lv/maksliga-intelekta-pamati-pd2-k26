@@ -1,0 +1,12 @@
+[project]
+name = "2-praktiskais-darbs"
+version = "0.1.0"
+
+requires-python = ">= 3.12"
+
+description = "Mākslīgā intelekta pamatu 2. praktiskais darbs."
+readme = "README.md"
+
+dependencies = [
+]
+

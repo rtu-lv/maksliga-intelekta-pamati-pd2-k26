@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+
+/pylock.toml
+/*.lock
+
+/.venv/
+/dist/
+
+.DS_Store
+
