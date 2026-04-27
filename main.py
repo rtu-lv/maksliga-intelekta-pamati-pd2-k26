@@ -20,8 +20,9 @@ Raisin = np.dtype(
 
 os.makedirs("graphs/scatterplots", exist_ok=True)
 
-df = pd.read_csv("./data.csv")
+df = pd.read_csv("./data.csv")  # dataframe input
 
+# ----SCATTER PLOT----
 color_map = {"Kecimen": "blue", "Besni": "orange"}
 
 
@@ -69,6 +70,7 @@ scatter_plot(
 os.makedirs("graphs/histograms", exist_ok=True)
 
 
+# ----HISTOGRAM----
 def histogram(df, col, filename, color_map):
     plt.figure(figsize=(6, 4))
 
@@ -94,6 +96,8 @@ def histogram(df, col, filename, color_map):
 histogram(df, "MajorAxisLength", "graphs/histograms/raisin_histogram_1.png", color_map)
 histogram(df, "MinorAxisLength", "graphs/histograms/raisin_histogram_2.png", color_map)
 
+# ----DISTRIBUTION PLOTS----
+
 
 def box_plot(df, col, filename):
     plt.figure(figsize=(8, 6))
@@ -113,6 +117,8 @@ os.makedirs("graphs/distributions", exist_ok=True)
 
 box_plot(df, "ConvexArea", "graphs/distributions/raisin_boxplot.png")
 violin_plot(df, "Eccentricity", "graphs/distributions/raisin_violinplot.png")
+
+# ----STATISTIC CALCULATIONS----
 
 os.makedirs("statistics", exist_ok=True)
 
