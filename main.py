@@ -21,50 +21,39 @@ Raisin = np.dtype(
 
 os.makedirs("graphs/scatterplots", exist_ok=True)
 
-df = pd.read_csv("./data.csv", dtype=Raisin)
+df = pd.read_csv("./data.csv")
 
 color_map = {"Kecimen": "blue", "Besni": "orange"}
 
-plt.figure(figsize=(10, 6))
-for label, color in color_map.items():
-    subset = df[df["Class"] == label]
 
-    plt.scatter(
-        subset["MajorAxisLength"],
-        subset["MinorAxisLength"],
-        c=color,
-        label=label,
-        alpha=0.6,
-        edgecolors="w",
-        s=60,
-    )
-
-plt.title("Raisin Classification: Major vs Minor Axis Length", fontsize=14)
-plt.xlabel("MajorAxisLength", fontsize=12)
-plt.ylabel("MinorAxisLength", fontsize=12)
-plt.legend(title="Raisin Variety")
-plt.grid(True, linestyle="--", alpha=0.5)
-
-plt.savefig("graphs/scatterplots/raisin_scatterplot_1.png", dpi=300)
-
-plt.figure(figsize=(10, 6))
-for label, color in color_map.items():
-    subset = df[df["Class"] == label]
-
-    plt.scatter(
-        subset["Area"],
-        subset["Extent"],
-        c=color,
-        label=label,
-        alpha=0.6,
-        edgecolors="w",
-        s=60,
-    )
-
-    plt.title("Raisin Classification: Area vs Extent", fontsize=14)
-    plt.xlabel("Area", fontsize=12)
-    plt.ylabel("Extent", fontsize=12)
+def scatter_plot(df, x_col, y_col, filename, color_map):
+    plt.figure(figsize=(10, 6))
+    for label, color in color_map.items():
+        subset = df[df["Class"] == label]
+        plt.scatter(
+            subset[x_col],
+            subset[y_col],
+            c=color,
+            label=label,
+            alpha=0.6,
+            edgecolors="w",
+            s=60,
+        )
+    plt.title(f"Raisin Classification: {x_col} vs {y_col}", fontsize=14)
+    plt.xlabel(x_col, fontsize=12)
+    plt.ylabel(y_col, fontsize=12)
     plt.legend(title="Raisin Variety")
     plt.grid(True, linestyle="--", alpha=0.5)
+    plt.savefig(filename, dpi=300)
 
-    plt.savefig("graphs/scatterplots/raisin_scatterplot_2.png", dpi=300)
+
+scatter_plot(
+    df,
+    "MajorAxisLength",
+    "MinorAxisLength",
+    "graphs/scatterplots/raisin_scatterplot_1.png",
+    color_map,
+)
+scatter_plot(
+    df, "Area", "Extent", "graphs/scatterplots/raisin_scatterplot_2.png", color_map
+)
