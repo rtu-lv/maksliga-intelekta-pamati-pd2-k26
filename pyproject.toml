@@ -8,5 +8,8 @@ description = "Mākslīgā intelekta pamatu 2. praktiskais darbs."
 readme = "README.md"
 
 dependencies = [
+	"numpy ~= 2.4.0",
+	"matplotlib ~= 3.10.0",
+	"pandas ~= 3.0.0",
 ]
 
