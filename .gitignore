@@ -4,8 +4,7 @@ __pycache__/
 /pylock.toml
 /*.lock
 
-/.venv/
+/*venv/
 /dist/
 
 .DS_Store
-

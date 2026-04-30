@@ -20,7 +20,7 @@ Raisin = np.dtype(
 
 os.makedirs("graphs/scatterplots", exist_ok=True)
 
-df = pd.read_csv("./data.csv")  # dataframe input
+df = pd.read_csv("./data.csv", dtype=Raisin)  # dataframe input
 
 # ----SCATTER PLOT----
 color_map = {"Kecimen": "blue", "Besni": "orange"}
