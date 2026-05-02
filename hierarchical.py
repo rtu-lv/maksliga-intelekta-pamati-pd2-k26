@@ -17,21 +17,24 @@ Raisin = np.dtype([
 
 df = pd.read_csv('./data.csv', dtype=Raisin)
 
+targets = df['Class'].map(classes)
 data = df.loc[:, 'Area':'Perimeter']
 norm = (data - data.mean()) / data.std()
 
-targets = df['Class'].map(classes)
-
 
 linkage = hir.ward(norm)
-
 hir.dendrogram(linkage, truncate_mode='level', p=5)
-plt.show()
 
+for count in [2, 3, 5]:
+	prediction = hir.fcluster(linkage, criterion='maxclust', t=count)
 
-predict = hir.fcluster(linkage, criterion='maxclust', t=2)
+	positive = np.sum(prediction == targets)
+	negative = len(data) - positive
+	precision = positive / len(data)
 
-plt.bar(['Pareizi pozitīvi', 'Kļūdaini negatīvi'],
-        [np.sum(predict == targets), np.sum(predict != targets)])
+	plt.figure()
+	plt.bar(['Pareizi pozitīvi', 'Kļūdaini negatīvi'], [positive, negative])
+	plt.title(f't={count}, precizitāte: {precision:.2f}')
+
 plt.show()
 
