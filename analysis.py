@@ -15,7 +15,6 @@ Raisin = np.dtype([
 
 df = pd.read_csv('./data.csv', dtype=Raisin)
 
-
 stats = df.groupby('Class').agg(['mean', 'var'])
 print(stats.T)
 
