@@ -4,8 +4,11 @@ __pycache__/
 /pylock.toml
 /*.lock
 
-/.venv/
+/venv/
 /dist/
 
 .DS_Store
 
+analysis/*
+unsupervised_ml/*
+supervised_ml/*
