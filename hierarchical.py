@@ -1,5 +1,3 @@
-import os
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -18,8 +16,6 @@ Raisin = np.dtype(
         ("Class", str),
     ]
 )
-
-os.makedirs("unsupervised_ml", exist_ok=True)
 
 df = pd.read_csv("./data.csv", dtype=Raisin)
 

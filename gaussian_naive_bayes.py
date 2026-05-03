@@ -1,5 +1,3 @@
-import os
-
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -9,8 +7,6 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
-
-os.makedirs("supervised_ml", exist_ok=True)
 
 Raisin = np.dtype(
     [
@@ -51,7 +47,9 @@ plt.figure(layout="tight")
 plt.axis(False)
 plt.title("Gaussian Naive Bayes")
 plt.table(cellText=cm, rowLabels=labels, colLabels=labels, loc="center").scale(1, 2.5)
-plt.savefig("supervised_ml/nb_confusion_matrix.png")
+
+plt.show()
+
 
 # ---experiment with---
 # smoothing
