@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -7,6 +9,8 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
+
+os.makedirs("supervised_ml", exist_ok=True)
 
 Raisin = np.dtype(
     [

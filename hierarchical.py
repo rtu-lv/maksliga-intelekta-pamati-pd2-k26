@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -16,6 +18,8 @@ Raisin = np.dtype(
         ("Class", str),
     ]
 )
+
+os.makedirs("unsupervised_ml", exist_ok=True)
 
 df = pd.read_csv("./data.csv", dtype=Raisin)
 
@@ -49,5 +53,4 @@ for count in [2, 3, 5]:
     plt.table(cellText=confusion, rowLabels=rows, colLabels=cols, loc="center").scale(
         1, 2.5
     )
-    plt.savefig(f"unsupervised_ml/hierarchical_t{count}.png")
 plt.show()

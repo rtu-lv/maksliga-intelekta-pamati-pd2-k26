@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -27,14 +29,13 @@ for x, y in [
     ("Area", "Extent"),
 ]:
     df.plot.scatter(x, y, c="Class", alpha=0.6)
-    plt.savefig("analysis/scatterplot.png")
 
 for measure in ["MajorAxisLength", "MinorAxisLength", "Area"]:
     df.pivot(columns="Class", values=measure).plot.hist(
         bins=30, xlabel=measure, alpha=0.6
     )
-    plt.savefig("analysis/histogram.png")
 
 for measure in ["ConvexArea", "Eccentricity"]:
     df.plot.box(by="Class", column=measure)
-    plt.savefig("analysis/boxplot.png")
+
+plt.show()

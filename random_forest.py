@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -7,6 +9,8 @@ from sklearn.metrics import (
     classification_report,
 )
 from sklearn.model_selection import train_test_split
+
+os.makedirs("supervised_ml", exist_ok=True)
 
 Raisin = np.dtype(
     [
@@ -55,7 +59,8 @@ plt.savefig("supervised_ml/rf_confusion_matrix.png")
 
 plt.figure(layout="tight")
 plt.barh(X.columns, importances)
-plt.savefig("supervised_ml/feature_importance.png")
+
+plt.show()
 
 # ---experiment with---
 # n_estimators, max_depth, min_samples_split, min_samples_leaf, max_features
