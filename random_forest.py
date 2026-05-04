@@ -51,7 +51,6 @@ plt.figure(layout="tight")
 plt.axis(False)
 plt.title("Random Forest")
 plt.table(cellText=cm, rowLabels=labels, colLabels=labels, loc="center").scale(1, 2.5)
-plt.savefig("supervised_ml/rf_confusion_matrix.png")
 
 plt.figure(layout="tight")
 plt.barh(X.columns, importances)

@@ -27,7 +27,6 @@ linkage = hier.ward(norm)
 
 
 hier.dendrogram(linkage, truncate_mode="level", p=5)
-plt.savefig("unsupervised_ml/dendrogram.png")
 
 for count in [2, 3, 5]:
     prediction = hier.fcluster(linkage, criterion="maxclust", t=count)
