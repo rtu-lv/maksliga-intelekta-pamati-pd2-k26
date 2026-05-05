@@ -29,6 +29,9 @@ df = pd.read_csv("./data.csv", dtype=Raisin)
 X = df.drop("Class", axis=1)
 Y = df["Class"].map({"Kecimen": 0, "Besni": 1})
 
+# set the same initial weights each time the model is run
+# torch.manual_seed(42)
+
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=42
 )
@@ -41,8 +44,6 @@ X_train = torch.tensor(X_train, dtype=torch.float32)
 X_test = torch.tensor(X_test, dtype=torch.float32)
 Y_train = torch.tensor(Y_train.values, dtype=torch.float32).reshape(-1, 1)
 Y_test = torch.tensor(Y_test.values, dtype=torch.float32).reshape(-1, 1)
-
-torch.manual_seed(42)
 
 
 class mlp(torch.nn.Module):
@@ -65,10 +66,14 @@ class mlp(torch.nn.Module):
 net = mlp()
 
 criterion = torch.nn.BCELoss()
-optimizer = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+# experiment here
+# optimizer = torch.optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+# try more epochs and higher lr with Adam
+optimizer = torch.optim.Adam(net.parameters(), lr=0.005)
 
 losses = []
-for epoch in range(1200):  # experiment with epoch count (1200 now)
+for epoch in range(3000):  # experiment with epoch count
     optimizer.zero_grad()
     output = net(X_train)
     loss = criterion(output, Y_train)
@@ -80,7 +85,7 @@ correct = 0
 total = 0
 with torch.no_grad():
     output = net(X_test)
-    predictions = (output > 0.5).float()  # sigmoid output threshold
+    predictions = (output > 0.5).float()
     correct = (predictions == Y_test).sum().item()
     total = Y_test.shape[0]
 
