@@ -49,12 +49,14 @@ Y_test = torch.tensor(Y_test.values, dtype=torch.float32).reshape(-1, 1)
 class mlp(torch.nn.Module):
     def __init__(self):
         super().__init__()
-        # experiment with different layer sizes and activation functions here
+        # experiment with different layer sizes, activation functions and dropout rates here
         self.layers = torch.nn.Sequential(
             torch.nn.Linear(7, 64),
             torch.nn.ReLU(),
+            # torch.nn.Dropout(0.2),
             torch.nn.Linear(64, 32),
             torch.nn.ReLU(),
+            # torch.nn.Dropout(0.2),
             torch.nn.Linear(32, 1),
             torch.nn.Sigmoid(),
         )
