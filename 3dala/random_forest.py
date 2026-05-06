@@ -29,10 +29,17 @@ Y = df["Class"]
 X_train, X_test, Y_train, Y_test = train_test_split(
     X, Y, test_size=0.2, random_state=42
 )
+# Test size doesn't help with overfitting. Test set just shows if the model is overfitting/underfitting. 0.2 is standard practice.
 # Note that number 42 is an arbitrary seed for Python's Mersenne Twister random number generator.
 # It is fixed to ensure reproducibility.
 
-rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+rfc = RandomForestClassifier(  # experiment here
+    n_estimators=100,  # how many trees to build
+    max_depth=10,  # maximum depth of each tree
+    min_samples_split=5,  # minimum number of samples required to split a node
+    min_samples_leaf=2,  # minimum number of samples required to be at a leaf node
+    max_features="sqrt",  # number of features to consider when looking for the best split. The optimal amount of features is sqrt(n_features)
+)
 rfc.fit(X_train, Y_train)
 
 Y_pred = rfc.predict(X_test)
@@ -45,7 +52,7 @@ print("\nClassification Report:\n", classification_rep)
 
 cm = pd.crosstab(Y_test, Y_pred).values
 labels = ["Besni", "Kecimen"]
-importances = rfc.feature_importances_
+importances = rfc.feature_importances_  # Atribūts, kas bieži tiek izmantots sadalīšanai un rada tīrus sadalījumus, iegūst augstāku nozīmīgumu.
 
 plt.figure(layout="tight")
 plt.axis(False)
@@ -56,6 +63,3 @@ plt.figure(layout="tight")
 plt.barh(X.columns, importances)
 
 plt.show()
-
-# ---experiment with---
-# n_estimators, max_depth, min_samples_split, min_samples_leaf, max_features
