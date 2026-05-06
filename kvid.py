@@ -44,7 +44,7 @@ Raisin = np.dtype([
 	('Class', str),
 ])
 
-data_path = Path(__file__).resolve().parents[1] / 'data.csv'
+data_path = Path(__file__).resolve().parent / 'data.csv'
 
 df = pd.read_csv(data_path, dtype=Raisin)
 
