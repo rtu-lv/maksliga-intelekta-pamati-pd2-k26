@@ -5,7 +5,7 @@ import scipy.cluster.hierarchy as hier
 
 classes = {'Besni': np.uint32(1), 'Kecimen': np.uint32(2)}
 Raisin = np.dtype([
-	('Area', np.uint16),
+	('Area', np.float32),
 	('MajorAxisLength', np.float32),
 	('MinorAxisLength', np.float32),
 	('Eccentricity', np.float32),

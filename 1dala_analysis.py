@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 Raisin = np.dtype([
-	('Area', np.uint16),
+	('Area', np.float32),
 	('MajorAxisLength', np.float32),
 	('MinorAxisLength', np.float32),
 	('Eccentricity', np.float32),
