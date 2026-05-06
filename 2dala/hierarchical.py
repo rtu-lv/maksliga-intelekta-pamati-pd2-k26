@@ -15,7 +15,7 @@ Raisin = np.dtype([
 	('Class', str),
 ])
 
-df = pd.read_csv('./../data.csv', dtype=Raisin)
+df = pd.read_csv('./data.csv', dtype=Raisin)
 
 targets = df['Class'].map(classes)
 data = df.loc[:, 'Area':'Perimeter']
