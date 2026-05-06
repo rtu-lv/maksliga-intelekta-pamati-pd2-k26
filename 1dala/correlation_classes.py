@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-csv = pd.read_csv("data.csv")
+csv = pd.read_csv("/..data.csv")
 for cls in csv["Class"].unique():
     subset = csv[csv["Class"] == cls]
 

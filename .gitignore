@@ -8,3 +8,6 @@ __pycache__/
 /dist/
 
 .DS_Store
+
+/1dala/out/
+/2dala/out/

@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-csv = pd.read_csv("data.csv")
+csv = pd.read_csv("./data.csv")
 
 # Drop the Class column if it exists
 corr = csv.drop(columns=["Class"], errors="ignore").corr()
