@@ -56,7 +56,6 @@ for i, cfg in enumerate(configs, 1):
     print(f"Accuracy: {acc:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}")
     print("-" * 50)
 
-# --- Results table ---
 results_df = pd.DataFrame(results)
 print("\n=== RESULTS TABLE ===")
 print(results_df)
