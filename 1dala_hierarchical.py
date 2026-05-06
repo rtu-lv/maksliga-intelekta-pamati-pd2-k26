@@ -38,7 +38,7 @@ for count in [2, 3, 5]:
 		rows = cols = list(classes.keys())
 
 		precision = np.diag(confusion).sum() / confusion.sum()
-		plt.figtext(0.025, 0.025, f'Precizitāte: {precision}')
+		plt.figtext(0.025, 0.025, f'Precizitāte: {precision:.2f}')
 	else:
 		rows = [f'{c} ({v})' for c, v in classes.items()]
 		cols = range(1, count + 1)
