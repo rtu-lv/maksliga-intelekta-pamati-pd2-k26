@@ -1,61 +1,88 @@
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn.metrics import (
     accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
     classification_report,
+    confusion_matrix,
 )
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 
-Raisin = np.dtype(
-    [
-        ("Area", np.uint16),
-        ("MajorAxisLength", np.float32),
-        ("MinorAxisLength", np.float32),
-        ("Eccentricity", np.float32),
-        ("ConvexArea", np.float32),
-        ("Extent", np.float32),
-        ("Perimeter", np.float32),
-        ("Class", str),
-    ]
-)
-
-df = pd.read_csv("./data.csv", dtype=Raisin)
+df = pd.read_csv("data.csv")
 
 X = df.drop("Class", axis=1)
-Y = df["Class"]
+y = df["Class"]
 
-X_train, X_test, Y_train, Y_test = train_test_split(
-    X, Y, test_size=0.2, random_state=42
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y # 0.2 sadala 80% apmācība, 20% testi
 )
 
-gnbc = GaussianNB()
-gnbc.fit(X_train, Y_train)
+# Experimentu hiperparametri
+configs = [
+    {"var_smoothing": 1e-12},
+    {"var_smoothing": 1e-9},
+    {"var_smoothing": 1e-6},
+]
 
-Y_pred = gnbc.predict(X_test)
+results = []
 
-accuracy = accuracy_score(Y_test, Y_pred)
-classification_rep = classification_report(Y_test, Y_pred)
+print("=== TRAINING EXPERIMENTS (Naive Bayes) ===\n")
 
-print(f"Accuracy: {accuracy}")
-print("\nClassification Report:\n", classification_rep)
+for i, cfg in enumerate(configs, 1):
+    model = GaussianNB(**cfg)
+    model.fit(X_train, y_train)
+    
+    pred = model.predict(X_train)
+    
+    acc = accuracy_score(y_train, pred)
+    precision = precision_score(y_train, pred, pos_label="Besni")
+    recall = recall_score(y_train, pred, pos_label="Besni")
+    f1 = f1_score(y_train, pred, pos_label="Besni")
+    
+    results.append({
+        "Experiment": i,
+        "Params": cfg,
+        "Accuracy": acc,
+        "Precision": precision,
+        "Recall": recall,
+        "F1": f1
+    })
+    
+    print(f"Experiment {i}")
+    print(f"Params: {cfg}")
+    print(f"Accuracy: {acc:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}")
+    print("-" * 50)
 
-cm = pd.crosstab(Y_test, Y_pred).values
-labels = ["Besni", "Kecimen"]
-plt.figure(layout="tight")
-plt.axis(False)
-plt.title("Gaussian Naive Bayes")
-plt.table(cellText=cm, rowLabels=labels, colLabels=labels, loc="center").scale(1, 2.5)
+# --- Results table ---
+results_df = pd.DataFrame(results)
+print("\n=== RESULTS TABLE ===")
+print(results_df)
 
-plt.show()
+# Labākā modeļa izvēle priekš testiem
+best_exp = max(results, key=lambda x: x["F1"])
 
+print("\n=== BEST MODEL ===")
+print(best_exp)
 
-# ---experiment with---
-# smoothing
+best_model = GaussianNB(**best_exp["Params"])
+best_model.fit(X_train, y_train)
 
-# for vs in [1e-12, 1e-11, 1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5]:
-#     gnbc = GaussianNB(var_smoothing=vs)
-#     gnbc.fit(X_train, Y_train)
-#     Y_pred = gnbc.predict(X_test)
-#     print(f"var_smoothing={vs}: {accuracy_score(Y_test, Y_pred):.4f}")
+print("\n=== TEST RESULTS ===")
+
+y_test_pred = best_model.predict(X_test)
+
+acc_test = accuracy_score(y_test, y_test_pred)
+print(f"Test Accuracy: {acc_test:.4f}")
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_test_pred))
+
+# Kļūdu matrica
+cm = confusion_matrix(y_test, y_test_pred)
+cm_df = pd.DataFrame(cm, index=["Besni", "Kecimen"], columns=["Besni", "Kecimen"])
+
+print("\nConfusion Matrix:")
+print(cm_df)

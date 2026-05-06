@@ -1,61 +1,87 @@
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
     classification_report,
+    confusion_matrix,
 )
 from sklearn.model_selection import train_test_split
 
-Raisin = np.dtype(
-    [
-        ("Area", np.uint16),
-        ("MajorAxisLength", np.float32),
-        ("MinorAxisLength", np.float32),
-        ("Eccentricity", np.float32),
-        ("ConvexArea", np.float32),
-        ("Extent", np.float32),
-        ("Perimeter", np.float32),
-        ("Class", str),
-    ]
-)
-
-df = pd.read_csv("./data.csv", dtype=Raisin)
+df = pd.read_csv("data.csv")
 
 X = df.drop("Class", axis=1)
-Y = df["Class"]
+y = df["Class"]
 
-X_train, X_test, Y_train, Y_test = train_test_split(
-    X, Y, test_size=0.2, random_state=42
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y # 0.2 sadala 80% apmācība, 20% testi
 )
-# Note that number 42 is an arbitrary seed for Python's Mersenne Twister random number generator.
-# It is fixed to ensure reproducibility.
 
-rfc = RandomForestClassifier(n_estimators=100, random_state=42)
-rfc.fit(X_train, Y_train)
+# Eksperimentu hiperparametri
+configs = [
+    {"n_estimators": 50, "max_depth": 5, "max_features": 2, "min_samples_split": 10, "min_samples_leaf": 5},
+    {"n_estimators": 100, "max_depth": 10, "max_features": 3, "min_samples_split": 5, "min_samples_leaf": 3},
+    {"n_estimators": 200, "max_depth": None, "max_features": None, "min_samples_split": 2, "min_samples_leaf": 1},
+]
 
-Y_pred = rfc.predict(X_test)
+results = []
 
-accuracy = accuracy_score(Y_test, Y_pred)
-classification_rep = classification_report(Y_test, Y_pred)
+print("=== TRAINING EXPERIMENTS ===\n")
 
-print(f"Accuracy: {accuracy}")
-print("\nClassification Report:\n", classification_rep)
+for i, cfg in enumerate(configs, 1):
+    model = RandomForestClassifier(**cfg, random_state=42)
+    model.fit(X_train, y_train)
 
-cm = pd.crosstab(Y_test, Y_pred).values
-labels = ["Besni", "Kecimen"]
-importances = rfc.feature_importances_
+    pred = model.predict(X_train)
 
-plt.figure(layout="tight")
-plt.axis(False)
-plt.title("Random Forest")
-plt.table(cellText=cm, rowLabels=labels, colLabels=labels, loc="center").scale(1, 2.5)
+    acc = accuracy_score(y_train, pred)
+    precision = precision_score(y_train, pred, pos_label="Besni")
+    recall = recall_score(y_train, pred, pos_label="Besni")
+    f1 = f1_score(y_train, pred, pos_label="Besni")
 
-plt.figure(layout="tight")
-plt.barh(X.columns, importances)
+    results.append({
+        "Experiment": i,
+        "Params": cfg,
+        "Accuracy": acc,
+        "Precision": precision,
+        "Recall": recall,
+        "F1": f1
+    })
 
-plt.show()
+    print(f"Experiment {i}")
+    print(f"Params: {cfg}")
+    print(f"Accuracy: {acc:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}")
+    print("-" * 50)
 
-# ---experiment with---
-# n_estimators, max_depth, min_samples_split, min_samples_leaf, max_features
+results_df = pd.DataFrame(results)
+print("\n=== RESULTS TABLE ===")
+print(results_df)
+
+# Labākā modeļa izvēle
+valid_results = [r for r in results if r["Accuracy"] < 1.0]  # izslēdz tos ar 100%
+best_exp = max(valid_results, key=lambda x: x["F1"])
+print("\n=== BEST MODEL ===")
+print(best_exp)
+
+best_model = RandomForestClassifier(**best_exp["Params"], random_state=42)
+best_model.fit(X_train, y_train)
+
+print("\n=== TEST RESULTS ===")
+
+y_test_pred = best_model.predict(X_test)
+
+acc_test = accuracy_score(y_test, y_test_pred)
+print(f"Test Accuracy: {acc_test:.4f}")
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_test_pred))
+
+# Kļūdu matrica
+cm = confusion_matrix(y_test, y_test_pred)
+cm_df = pd.DataFrame(cm, index=["Besni", "Kecimen"], columns=["Besni", "Kecimen"])
+
+print("\nConfusion Matrix:")
+print(cm_df)
