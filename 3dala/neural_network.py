@@ -63,7 +63,7 @@ configs = [
     },
     {  
         "hidden1": 64,
-        "hidden2": 32,
+        "hidden2": 64,
         "dropout_rate": 0.2,
         "learning_rate": 0.01,
         "epochs": 3000,
@@ -72,7 +72,7 @@ configs = [
     {  
         "hidden1": 64,
         "hidden2": 32,
-        "dropout_rate": 0.2,
+        "dropout_rate": 0,
         "learning_rate": 0.001,
         "epochs": 5000,
         "optimizer": "Adam",
@@ -138,7 +138,8 @@ print("\n=== RESULTS TABLE ===")
 print(results_df)
 
 # Labākā modeļa izvēle
-best_exp = max(results, key=lambda x: x["F1"])
+valid_results = [r for r in results if r["Accuracy"] < 0.99] # izslēdz modeļus, kuriem precizitāte ir > 99%
+best_exp = max(valid_results, key=lambda x: x["F1"])
 
 print("\n=== BEST MODEL ===")
 print(best_exp)
