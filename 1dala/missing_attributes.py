@@ -4,4 +4,4 @@
 import pandas as pd
 csv = pd.read_csv("./data.csv")
 missing_data = csv[csv.isnull().any(axis=1)]
-missing_data.to_csv("out/missing_data.csv", index=False)
+missing_data.to_csv("./1dala/out/missing_data.csv", index=False)
