@@ -64,8 +64,12 @@ for count in [2, 3, 4, 5, 6]:
 	plt.suptitle(f'K-vidējie, k={count}')
 	plt.axis(False)
 
-	rows = [f'{c} ({v})' for c, v in classes.items()]
-	cols = range(1, count + 1)
+	rows = [f'Patiesi {v} ({c})' for c, v in classes.items()]
+	cols = [f'Prognozēti {i+1}' for i in range(count)]
+
+	if count == len(classes):
+		precision = np.diag(confusion).sum() / confusion.sum()
+		plt.figtext(0.025, 0.025, f'Precizitāte: {precision:.2f}')
 
 	plt.table(cellText=confusion,
 	          rowLabels=rows, colLabels=cols,
