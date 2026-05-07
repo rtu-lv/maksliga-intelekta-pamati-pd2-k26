@@ -35,14 +35,12 @@ for count in [2, 3, 5]:
 	plt.suptitle(f'Hierarhiskā klasterēšana, t={count}')
 	plt.axis(False)
 
-	if count == len(classes):
-		rows = cols = list(classes.keys())
+	rows = [f'Patiesi {v} ({c})' for c, v in classes.items()]
+	cols = [f'Prognozēti {i+1}' for i in range(count)]
 
+	if count == len(classes):
 		precision = np.diag(confusion).sum() / confusion.sum()
 		plt.figtext(0.025, 0.025, f'Precizitāte: {precision:.2f}')
-	else:
-		rows = [f'{c} ({v})' for c, v in classes.items()]
-		cols = range(1, count + 1)
 
 	plt.table(cellText=confusion,
 	          rowLabels=rows, colLabels=cols,
