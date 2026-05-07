@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.cluster.hierarchy as hier
 
-classes = {'Besni': np.uint32(1), 'Kecimen': np.uint32(2)}
+classes = {'Kecimen': np.uint32(1), 'Besni': np.uint32(2)}
 Raisin = np.dtype([
 	('Area', np.float32),
 	('MajorAxisLength', np.float32),
