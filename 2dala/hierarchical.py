@@ -18,7 +18,7 @@ Raisin = np.dtype([
 df = pd.read_csv('./data.csv', dtype=Raisin)
 
 targets = df['Class'].map(classes)
-data = df.loc[:, 'Area':'Perimeter']
+data = df.iloc[:, :-1]
 norm = (data - data.mean()) / data.std()
 
 linkage = hier.ward(norm)
