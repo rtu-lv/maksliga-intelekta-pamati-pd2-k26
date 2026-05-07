@@ -24,6 +24,7 @@ norm = (data - data.mean()) / data.std()
 linkage = hier.ward(norm)
 
 
+plt.title('Dendrogramma')
 hier.dendrogram(linkage, truncate_mode='level', p=5)
 
 for count in [2, 3, 5]:
