@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,9 +42,7 @@ Raisin = np.dtype([
 	('Class', str),
 ])
 
-data_path = Path(__file__).resolve().parent / 'data.csv'
-
-df = pd.read_csv(data_path, dtype=Raisin)
+df = pd.read_csv('./data.csv', dtype=Raisin)
 
 targets = df['Class'].map(classes)
 data = df.loc[:, 'Area':'Perimeter']
